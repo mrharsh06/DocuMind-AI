@@ -1,0 +1,20 @@
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class AppSettings(BaseSettings):
+    app_env: str = "local"
+    app_name: str = "DocuMind AI"
+    app_port: int = 8000
+
+    gemini_api_key: str
+    gemini_model_name: str = "gemini-pro"
+    gemini_embed_model: str = "embedding-001"
+
+    database_url: str = "postgresql+psycopg://user:pass@localhost:5432/documind"  # Optional for now
+    vector_db_dir: str = "./vector_store"
+    aws_region: str = "us-east-1"
+
+    log_level: str = "INFO"
+
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+
+settings = AppSettings()
