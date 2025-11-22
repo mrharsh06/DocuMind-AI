@@ -5,7 +5,7 @@ class AppSettings(BaseSettings):
     app_name: str = "DocuMind AI"
     app_port: int = 8000
 
-    gemini_api_key: str
+    gemini_api_key: str = ""  # Will be required when we use Gemini
     gemini_model_name: str = "gemini-pro"
     gemini_embed_model: str = "embedding-001"
 

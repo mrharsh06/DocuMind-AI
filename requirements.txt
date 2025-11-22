@@ -1,0 +1,13 @@
+#fastAPI and server
+fastapi==0.104.1
+uvicorn[standard]==0.30.1
+
+#configuration management
+pydantic-settings==2.1.0
+python-dotenv==1.0.0
+
+#Google Gemini API
+google-generativeai==0.3.2
+
+#Data validation
+pydantic==2.9.2
