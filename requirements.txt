@@ -11,3 +11,11 @@ google-generativeai==0.3.2
 
 #Data validation
 pydantic==2.9.2
+
+#Document processing
+PyPDF2==3.0.1
+python-docx==1.1.0
+# LangChain - will add later when needed for text splitting
+# langchain==0.3.0
+# langchain-community==0.3.0
+# langchain-text-splitters==0.3.0
