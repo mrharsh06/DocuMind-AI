@@ -2,7 +2,7 @@ from typing import Optional
 from docx import Document
 import logging
 
-logger=logging.get_Logger(__name__)
+logger=logging.getLogger(__name__)
 
 class DOCXParser:
     """

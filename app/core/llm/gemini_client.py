@@ -29,7 +29,7 @@ class GeminiClient:
     
     def embed(self, texts: List[str]) -> List[List[float]]:
         """
-        Generate embeddings for a list of texts.
+        Generate embeddings for a list of texts using Gemini.
         
         Args:
             texts: List of text strings to embed
@@ -37,12 +37,11 @@ class GeminiClient:
         Returns:
             List of embedding vectors (each is a list of floats)
         """
-        # Gemini embeddings API (will implement properly when we add embeddings)
-        # For now, this is a placeholder structure
         embeddings = []
         for text in texts:
-            # TODO: Implement actual embedding call when we reach that stage
-            # result = genai.embed_content(model=settings.gemini_embed_model, content=text)
-            # embeddings.append(result['embedding'])
-            pass
+            result = genai.embed_content(
+                model=settings.gemini_embed_model,
+                content=text
+            )
+            embeddings.append(result['embedding'])
         return embeddings

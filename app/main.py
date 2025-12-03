@@ -1,5 +1,6 @@
 from fastapi import FastAPI 
 from app.config import settings
+from app.api.routes import documents
 
 #create FastAPI app instance
 app=FastAPI(
@@ -7,6 +8,9 @@ app=FastAPI(
     version="1.0.0",
     description="DocuMind AI - Multi-Agent Document Intelligence System"
 )
+
+# Include routers
+app.include_router(documents.router)
 
 #health check endpoint
 @app.get("/health")

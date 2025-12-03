@@ -7,7 +7,7 @@ class AppSettings(BaseSettings):
 
     gemini_api_key: str = ""  # Will be required when we use Gemini
     gemini_model_name: str = "gemini-pro"
-    gemini_embed_model: str = "embedding-001"
+    gemini_embed_model: str = "models/embedding-001"
 
     database_url: str = "postgresql+psycopg://user:pass@localhost:5432/documind"  # Optional for now
     vector_db_dir: str = "./vector_store"

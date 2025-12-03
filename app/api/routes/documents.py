@@ -28,17 +28,21 @@ async def upload_document(file: UploadFile = File(...)):
         temp_path=temp_file.name
 
     try:
-        service=DocumentService()
-        chunks=service.process_document(temp_path)
+        service = DocumentService()
+        # Store document in vector store (this also processes it)
+        result = service.store_document_in_vector_store(temp_path)
 
-        if not chunks:
+        if not result:
             raise HTTPException(
                 status_code=500,
-                detail="Failed to process Document"
+                detail="Failed to process and store document"
             )
+        
+        # Unpack the tuple: (chunks, chunk_ids)
+        chunks, chunk_ids = result
 
         return DocumentUploadResponse(
-            message="Document processed successfully",
+            message="Document processed and stored in vector database successfully",
             file_name=file.filename,
             chunk_count=len(chunks),
             chunks=chunks
