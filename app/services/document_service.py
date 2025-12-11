@@ -9,6 +9,7 @@ from ingestion.parsers.text_parser import TextParser
 from ingestion.chunkers.text_splitter import TextSplitter
 from app.core.rag.vector_store import ChromaVectorStore
 from app.services.embedding_service import EmbeddingService
+from app.config import settings
 
 logger=logging.getLogger(__name__)
 

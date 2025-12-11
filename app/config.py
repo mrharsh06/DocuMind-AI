@@ -6,7 +6,7 @@ class AppSettings(BaseSettings):
     app_port: int = 8000
 
     gemini_api_key: str = ""  # Will be required when we use Gemini
-    gemini_model_name: str = "gemini-pro"
+    gemini_model_name: str = "gemini-2.5-flash"
     gemini_embed_model: str = "models/embedding-001"
 
     database_url: str = "postgresql+psycopg://user:pass@localhost:5432/documind"  # Optional for now
