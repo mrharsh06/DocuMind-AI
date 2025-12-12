@@ -18,11 +18,16 @@ class QueryService:
 
     def query(self,question:str,n_results: int=5)->Dict:
         """
-    n_result=number of relevant chunks to retrieve
-
-    returns:
-    Dictioanry containing:
-       ---answer   ---sources:list of relevant document chunks with metadata
+        Query documents using RAG (Retrieval-Augmented Generation).
+        
+        Args:
+            question: The user's question
+            n_results: Number of relevant chunks to retrieve (default: 5)
+        
+        Returns:
+            Dictionary containing:
+                - answer: AI-generated answer
+                - sources: List of relevant document chunks with metadata
         """
 
         logger.info(f"Processing query:{question}")

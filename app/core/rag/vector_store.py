@@ -62,3 +62,92 @@ class ChromaVectorStore:
         """
         # PersistentClient automatically persists, no action needed
         pass
+    
+    def get_all_documents(self, limit: Optional[int] = None) -> Dict:
+        """
+        Get all documents from the collection with their metadata.
+        
+        Args:
+            limit: Optional limit on number of documents to return
+            
+        Returns:
+            Dictionary containing ids, documents, and metadatas
+        """
+        # ChromaDB doesn't have a direct "get all" method, so we query with empty query
+        # We'll use a workaround: get collection count and query with a dummy query
+        count = self.collection.count()
+        
+        if count == 0:
+            return {
+                "ids": [],
+                "documents": [],
+                "metadatas": []
+            }
+        
+        # Get all documents by querying with a large n_results
+        # Note: This is a workaround since ChromaDB doesn't have direct "get all"
+        results = self.collection.get(
+            limit=limit if limit else count
+        )
+        
+        return {
+            "ids": results.get("ids", []),
+            "documents": results.get("documents", []),
+            "metadatas": results.get("metadatas", [])
+        }
+    
+    def delete_documents_by_file_name(self, file_name: str) -> int:
+        """
+        Delete all document chunks associated with a specific file name.
+        
+        Args:
+            file_name: The name of the file to delete
+            
+        Returns:
+            Number of documents deleted
+        """
+        # Get all documents to find ones matching the file name
+        all_docs = self.get_all_documents()
+        metadatas = all_docs.get("metadatas", [])
+        ids = all_docs.get("ids", [])
+        
+        # Find IDs where file_name matches
+        ids_to_delete = [
+            doc_id 
+            for doc_id, metadata in zip(ids, metadatas) 
+            if metadata and metadata.get("file_name") == file_name
+        ]
+        
+        if not ids_to_delete:
+            return 0
+        
+        # Delete the documents
+        self.collection.delete(ids=ids_to_delete)
+        return len(ids_to_delete)
+    
+    def get_collection_count(self) -> int:
+        """
+        Get the total number of documents in the collection.
+        
+        Returns:
+            Total count of documents
+        """
+        return self.collection.count()
+    
+    def get_unique_file_names(self) -> List[str]:
+        """
+        Get a list of all unique file names in the collection.
+        
+        Returns:
+            List of unique file names
+        """
+        all_docs = self.get_all_documents()
+        metadatas = all_docs.get("metadatas", [])
+        
+        # Extract unique file names
+        file_names = set()
+        for metadata in metadatas:
+            if metadata and "file_name" in metadata:
+                file_names.add(metadata["file_name"])
+        
+        return sorted(list(file_names))
