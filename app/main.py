@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from app.config import settings
 from app.api.routes import documents
 from app.api.routes import query
+from app.api.routes import admin
+
 
 #create FastAPI app instance
 app=FastAPI(
@@ -13,6 +15,8 @@ app=FastAPI(
 # Include routers
 app.include_router(documents.router)
 app.include_router(query.router)
+app.include_router(admin.router)
+
 
 #health check endpoint
 @app.get("/health")
