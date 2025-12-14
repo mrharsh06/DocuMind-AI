@@ -3,6 +3,9 @@ from app.config import settings
 from app.api.routes import documents
 from app.api.routes import query
 from app.api.routes import admin
+from app.core.logging_config import setup_logging
+
+setup_logging()
 
 
 #create FastAPI app instance
