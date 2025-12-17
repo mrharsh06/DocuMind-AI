@@ -1,6 +1,7 @@
 import requests
 import os
 import time
+from typing import Optional
 
 BASE_URL="http://localhost:8000"
 
@@ -33,14 +34,19 @@ def test_upload_document(file_path: str):
     else:
         print(f"❌ Upload failed: {response.text}")
         return None
-def test_query(question: str, n_results: int = 5):
+def test_query(question: str, n_results: int = 5,file_name: Optional[str]=None):
     """Test query endpoint"""
     print(f"\n❓ Testing query: '{question}'")
+
+    if file_name:
+        print(f"   Filtering to file: {file_name}")
     
     payload = {
         "question": question,
         "n_results": n_results
     }
+    if file_name:
+        payload["file_name"]=file_name
     
     response = requests.post(f"{BASE_URL}/query/", json=payload)
     
@@ -60,6 +66,48 @@ def test_query(question: str, n_results: int = 5):
     else:
         print(f"❌ Query failed: {response.text}")
         return None
+def test_query_with_file_filter(question: str,file_name: str):
+    """Test query endpoint with file name filter"""
+    print(f"\n🔍 Testing query with file filter: '{question}'")
+    print(f"   Filtering to: {file_name}")
+    
+    payload = {
+        "question": question,
+        "n_results": 5,
+        "file_name": file_name
+    }
+    
+    response = requests.post(f"{BASE_URL}/query/", json=payload)
+    
+    print(f"Status: {response.status_code}")
+    if response.status_code == 200:
+        result = response.json()
+        print(f"✅ Filtered query successful!")
+        print(f"\n📝 Answer:")
+        print(f"   {result.get('answer')}")
+        print(f"\n📚 Sources found: {len(result.get('sources', []))}")
+        
+        # Check if all sources are from the filtered file
+        all_from_filtered_file = all(
+            source.get('file_name') == file_name 
+            for source in result.get('sources', [])
+        )
+        
+        if all_from_filtered_file:
+            print(f"✅ All sources are from '{file_name}' (filter working!)")
+        else:
+            print(f"⚠️  Some sources are not from '{file_name}' (filter may not be working)")
+        
+        for i, source in enumerate(result.get('sources', [])[:3], 1):
+            print(f"\n   Source {i}:")
+            print(f"   - File: {source.get('file_name')}")
+            print(f"   - Similarity: {source.get('similarity_score'):.3f}")
+            print(f"   - Preview: {source.get('chunk')[:100]}...")
+        return result
+    else:
+        print(f"❌ Filtered query failed: {response.text}")
+        return None
+
 def test_list_documents():
     """Test admin list documents endpoint"""
     print(f"\n📋 Testing list documents...")
@@ -129,7 +177,12 @@ def main():
     if uploaded_file:
         test_query("What is this document about?")
     else:
-        print("\n⚠️  Skipping query test (no document uploaded)")
+        # Try to query any existing documents
+        all_docs = test_list_documents()
+        if all_docs and all_docs.get('files'):
+            test_query("What is this document about?")
+        else:
+            print("\n⚠️  Skipping query test (no documents available)")
     
     # Step 5: List documents (after upload)
     print("\n" + "-" * 60)

@@ -48,12 +48,21 @@ class ChromaVectorStore:
         """
         Query the vector store for similar documents.
         """
-        results = self.collection.query(
-            query_texts=query_texts,
-            n_results=n_results,
-            where=where,
-            query_embeddings=embeddings,
-        )
+        # Build query parameters - only include 'where' if provided (ChromaDB doesn't accept None)
+        query_params = {
+            "query_texts": query_texts,
+            "n_results": n_results,
+        }
+        
+        # Only add 'where' if it's not None
+        if where is not None:
+            query_params["where"] = where
+        
+        # Only add 'query_embeddings' if provided
+        if embeddings is not None:
+            query_params["query_embeddings"] = embeddings
+        
+        results = self.collection.query(**query_params)
         return results
     def persist(self):
         """

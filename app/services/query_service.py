@@ -45,10 +45,10 @@ class QueryService:
         # Query vector store - if we have Gemini embedding, use it; otherwise ChromaDB will use its default
         if question_embedding:
             results = self.vector_store.query(
-                query_texts=[question],
-                n_results=n_results,
-                embeddings=[question_embedding]
-            )
+            query_texts=[question],
+            n_results=n_results,
+            embeddings=[question_embedding]
+        )
         else:
             # Use ChromaDB's default embedding function
             results = self.vector_store.query(
@@ -103,6 +103,7 @@ Answer:"""
         # Try to generate answer with Gemini, but provide fallback if it fails
         try:
             if settings.gemini_api_key:
+                
                 answer = self.gemini_client.chat(prompt)
                 logger.info(f"Generated answer for query: {question[:50]}...")
             else:
