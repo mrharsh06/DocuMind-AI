@@ -16,16 +16,18 @@ pydantic>=2.11.0
 #Document processing
 PyPDF2==3.0.1
 python-docx==1.1.0
-# LangChain - will add later when needed for text splitting
-# langchain==0.3.0
-# langchain-community==0.3.0
-# langchain-text-splitters==0.3.0
+# LangChain and LangGraph for multi-agent system
+langchain>=0.3.0
+langchain-community>=0.3.0
+langchain-google-genai>=2.0.0
+langgraph>=0.2.0
 
 #vector database
 chromadb~=1.1.0
 # duckdb==1.0.0
 
 #Multi-Agent Framework
+# Using LangChain/LangGraph instead of CrewAI (better Python 3.13 support)
 # crewai>=0.203.0
 # crewai-tools==0.0.5
 
